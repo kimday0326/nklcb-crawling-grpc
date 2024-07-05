@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+service CrawlingService {
+  rpc Crawl (CrawlingRequest) returns (CrawlingResponse) {}
+}
+
+message CrawlingRequest {
+  string rss_url = 1;
+  string base_time = 2;
+}
+
+message CrawlingResponse {
+  repeated Article articles = 1;
+}
+
+message Article {
+  string title = 1;
+  string summary = 2;
+  string content = 3;
+  string author = 4;
+  string link = 5;
+  string publishedAt = 6;
+  repeated string keywords = 7;
+}
