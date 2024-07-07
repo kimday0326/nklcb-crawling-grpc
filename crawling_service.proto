@@ -6,7 +6,8 @@ service CrawlingService {
 
 message CrawlingRequest {
   string rss_url = 1;
-  string base_time = 2;
+  string start_date_time = 2;
+  string end_date_time = 3;
 }
 
 message CrawlingResponse {

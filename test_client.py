@@ -8,7 +8,8 @@ def run():
 
         request = crawling_service_pb2.CrawlingRequest(
             rss_url='https://d2.naver.com/d2.atom',
-            base_time='2024-07-02T00:00:00'
+            start_date_time='2024-06-27T00:00:00',
+            end_date_time='2024-07-01T00:00:00'
         )
         
         response = stub.Crawl(request)

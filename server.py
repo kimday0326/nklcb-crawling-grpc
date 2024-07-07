@@ -10,17 +10,16 @@ class CrawlingServiceServicer(crawling_service_pb2_grpc.CrawlingServiceServicer)
     def Crawl(self, request, context):
         print(f"Received request with RSS link: {request.rss_url}")
         rss_parser = RSSParser(request.rss_url)
-        # base_time = time.strptime(request.base_time, '%Y-%m-%dT%H:%M:%S')
         extractor = KeywordExtractor()
-        print(request.base_time)
-        
+
+        print(f"[INFO] Start crawling from {request.start_date_time} to {request.end_date_time}")
+        print("-"*50)
+                
         articles = []
         for entry in rss_parser.feed_list:
             publised_at = time.strftime('%Y-%m-%dT%H:%M:%S',entry.get('published_parsed') or entry.get('updated_parsed'))
-            # print(entry.get('title'))
-            print(publised_at, request.base_time)
-            if publised_at > request.base_time:
-                print(publised_at > request.base_time)
+
+            if request.start_date_time < publised_at < request.end_date_time:
                 content = entry.get('content.value') or entry.get('summary')
                 summary, keywords = extractor.generate_response(content)
                 article = crawling_service_pb2.Article(
@@ -33,8 +32,10 @@ class CrawlingServiceServicer(crawling_service_pb2_grpc.CrawlingServiceServicer)
                     keywords=keywords,
                 )
                 articles.append(article)
+                print (f"Crawled article: {article.title}")
                 time.sleep(1)
-
+        print("Crawling finished")
+        print("-"*50)
         return crawling_service_pb2.CrawlingResponse(articles=articles)
 
 def serve():
