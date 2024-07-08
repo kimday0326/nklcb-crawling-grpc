@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from dotenv import load_dotenv
 import google.generativeai as genai
 
@@ -40,9 +41,13 @@ class KeywordExtractor:
             raise ValueError("Failed to decode JSON response")
         
     def generate_response(self, text):
-        prompt = self.create_prompt(text)
-        response = self.model.generate_content(prompt)
-        return self.parse_response(response.text)
+        try:
+            prompt = self.create_prompt(text)
+            response = self.model.generate_content(prompt)
+            return self.parse_response(response.text)
+        except Exception as e:
+            print(f"Failed to generate response: {e}")
+            raise e
 
 def main():
     text = """hello world"""
