@@ -1,6 +1,5 @@
 import os
 import json
-import time
 from dotenv import load_dotenv
 import google.generativeai as genai
 
@@ -20,7 +19,7 @@ class KeywordExtractor:
         self.model = genai.GenerativeModel('gemini-1.5-flash')
 
     def create_prompt(self, text):
-        prompt = f"""다음 글의 요약과 메인 키워드를 10개 추출하고 반환해줘. JSON 객체는 "summary"라는 50자 이내의 문자열과 "keywords"라는 키와 키워드 리스트를 포함해야 해.
+        prompt = f"""다음 글의 요약과 메인 키워드(띄어쓰기, 특수문자 없이) 를 10개 추출하고 반환해줘. JSON 객체는 "summary"라는 50자 이내의 문자열과 "keywords"라는 키와 키워드 리스트를 포함해야 해.
         글:
         "{text}"
         응답 예시:
@@ -47,6 +46,7 @@ class KeywordExtractor:
             return self.parse_response(response.text)
         except Exception as e:
             print(f"Failed to generate response: {e}")
+            print (response.prompt_feedback)
             raise e
 
 def main():
