@@ -6,6 +6,9 @@ import grpc
 import crawling_service_pb2
 import crawling_service_pb2_grpc
 
+os.environ["GRPC_VERBOSITY"] = "ERROR"
+os.environ["GRPC_TRACE"] = ""
+
 
 def run():
     with grpc.insecure_channel("localhost:50051") as channel:
@@ -14,7 +17,7 @@ def run():
         request = crawling_service_pb2.CrawlingRequest(
             rss_url="https://d2.naver.com/d2.atom",
             start_date_time="2024-06-27T00:00:00",
-            end_date_time="2024-07-01T00:00:00",
+            end_date_time="2024-07-11T00:00:00",
         )
 
         response = stub.Crawl(request)

@@ -1,6 +1,5 @@
 import feedparser
 import time
-import logging
 import crawling_service_pb2
 
 
@@ -14,7 +13,7 @@ class RSSParser:
             feed = feedparser.parse(self.rss_url)
             return feed.entries
         except Exception as e:
-            logging.error(f"Error fetching RSS feed: {e}")
+            print(f"Error fetching RSS feed: {e}")
             return None
 
     def parse_article(self, entry, extractor, start_date_time, end_date_time):
@@ -34,7 +33,7 @@ class RSSParser:
                 content = entry.get("summary")
 
             if content is None:
-                logging.error(f"Error extracting content from entry: {entry}")
+                print(f"Error extracting content from entry: {entry}")
                 return None
 
             summary, keywords = extractor.generate_response(content)
